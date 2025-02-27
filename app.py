@@ -27,3 +27,11 @@ async def predict(file: UploadFile = File(...)):
     predicted_class = np.argmax(prediction, axis=1)[0]  # Assuming classification
     
     return {"prediction": int(predicted_class)}
+
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, World!"}
