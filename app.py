@@ -15,7 +15,7 @@ except Exception as e:
 
 # Define feature columns (Ensure these match the trained model)
 FEATURES = ['Temperature', 'Milk_visibility', 'IUFL', 'EUFL', 'IUFR', 'EUFR', 'IURL', 'EURR']
-SEQ_LENGTH = 10  # Expected sequence length
+SEQ_LENGTH = 8  # Expected sequence length
 
 # Preprocessing function to process CSV in chunks
 def preprocess_data(file_bytes):
