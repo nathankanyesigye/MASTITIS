@@ -15,7 +15,7 @@ except Exception as e:
 
 # Define feature columns (Ensure these match the trained model)
 FEATURES = ['Temperature', 'Milk_visibility', 'IUFL', 'EUFL', 'IUFR', 'EUFR', 'IURL', 'EURR']
-SEQ_LENGTH = 8  # Expected sequence length
+SEQ_LENGTH = 10  # This matches the sequence length expected by the model
 
 # Preprocessing function to process CSV in chunks
 def preprocess_data(file_bytes):
@@ -64,10 +64,11 @@ async def predict(file: UploadFile = File(...)):
         # Predict using the trained model
         prediction = model.predict(processed_data)
 
-        # Convert prediction output
-        predicted_class = int(np.argmax(prediction, axis=1)[0])  # Adjust based on your model output
+        # Convert prediction output (binary classification)
+        predicted_class = int(np.round(prediction[0]))  # For binary classification (0 or 1)
 
         return {"prediction": predicted_class}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
+
