@@ -15,7 +15,7 @@ except Exception as e:
 
 # Define feature columns (Ensure these match the trained model)
 FEATURES = ['Temperature', 'Milk_visibility', 'IUFL', 'EUFL', 'IUFR', 'EUFR', 'IURL', 'EURR']
-SEQ_LENGTH = 10  # This matches the sequence length expected by the model
+SEQ_LENGTH = 10  # Sequence length is 10
 
 # Preprocessing function to process CSV in chunks
 def preprocess_data(file_bytes):
@@ -71,4 +71,5 @@ async def predict(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
+
 
