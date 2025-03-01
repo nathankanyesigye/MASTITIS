@@ -13,17 +13,20 @@ try:
 except Exception as e:
     raise RuntimeError(f"Error loading model: {e}")
 
-# Define feature columns (Ensure these match the trained model)
+# Define feature columns (now matching the model's 10-feature input)
+# Define feature columns (matching the model's 8-feature input)
 FEATURES = ['Temperature', 'Milk_visibility', 'IUFL', 'EUFL', 'IUFR', 'EUFR', 'IURL', 'EURR']
-SEQ_LENGTH = 10  # Sequence length is 10
 
+SEQ_LENGTH = 10  # Ensure sequence length matches the model
+
+# Preprocessing function to process CSV in chunks
 # Preprocessing function to process CSV in chunks
 def preprocess_data(file_bytes):
     try:
         # Read CSV
         df = pd.read_csv(io.BytesIO(file_bytes))
 
-        # Ensure the CSV contains required features
+        # Ensure the CSV contains the required 8 feature columns (not 10)
         if not all(col in df.columns for col in FEATURES):
             raise HTTPException(status_code=400, detail="CSV is missing required feature columns")
 
@@ -59,7 +62,7 @@ async def predict(file: UploadFile = File(...)):
         data_bytes = await file.read()
 
         # Preprocess the CSV file
-        processed_data = preprocess_data(data_bytes)  # Shape: (1, 10, 8)
+        processed_data = preprocess_data(data_bytes)  # Shape: (1, 10, 10)
 
         # Predict using the trained model
         prediction = model.predict(processed_data)
@@ -71,5 +74,3 @@ async def predict(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during prediction: {str(e)}")
-
-
